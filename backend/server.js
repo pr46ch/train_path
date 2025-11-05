@@ -3,8 +3,11 @@ import cors from "cors";
 import findRoute from "./test_api3.js";  // default export
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors({
+  origin: "*", 
+  methods: ["POST"]
+}));
 
 
 app.post("/path", async (req, res) => {

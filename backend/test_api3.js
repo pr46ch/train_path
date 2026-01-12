@@ -1,7 +1,6 @@
 import { searchTrainBetweenStations } from 'irctc-connect';
 import { railwayStationsData } from './stations.js';
 import { calculateDistance } from './stations.js';
-import { DateTime } from "luxon";
 
 // Helper function to convert time to minutes
 function toMinutes(timeStr) {
@@ -93,41 +92,21 @@ function heuristic(currentStation, destinationStation, speedKmh = 50) {
 
 // Main A* Algorithm - Fixed version
 async function astar(source_code, destination_code) {
-  const now = new Date();
-  console.log(now);
-  // Force IST using Intl
-  const formatter = new Intl.DateTimeFormat("en-IN", {
+const now = new Date(
+  new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Kolkata",
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    weekday: "short",
-    hour12: false
-  });
+    second: "2-digit",
+  }).format(new Date())
+);
 
-  const parts = formatter.formatToParts(now);
-
-// Extract IST hour & minute
-  const hour = Number(parts.find(p => p.type === "hour").value);
-  const minute = Number(parts.find(p => p.type === "minute").value);
-
-// Keep variable name: startTimeMinutes
-  const startTimeMinutes = hour * 60 + minute;
-
-// Convert weekday string → number (0 = Sunday, 6 = Saturday)
-  const weekdayMap = {
-  Sun: 0,
-  Mon: 1,
-  Tue: 2,
-  Wed: 3,
-  Thu: 4,
-  Fri: 5,
-  Sat: 6
-  };
-
-// Keep variable name: startDay
-  const startDay = weekdayMap[
-    parts.find(p => p.type === "weekday").value
-  ];
+const startTimeMinutes = now.getHours() * 60 + now.getMinutes();
+const startDay = now.getDay();
   const openSet = new Set([source_code]);
   const cameFrom = new Map();
   const trainUsed = new Map();

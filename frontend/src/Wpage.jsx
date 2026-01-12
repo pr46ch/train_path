@@ -3,7 +3,9 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Loding, { p } from "./components/Loding";
 import Paths from "./components/Paths";
-
+import StationList from "./StationList";
+import { railwayStationsData } from "../public/railwaystationlist";
+import StationListto from "./StationListto";
 export default function Wpage(props) {
   const [isloading, setisloading] = useState(false);
   const [currlocation, setcurrlocation] = useState("");
@@ -11,6 +13,8 @@ export default function Wpage(props) {
   const [finalcurr, setfinalcurr] = useState("");
   const [finaldest, setfinaldest] = useState("");
   const [paths, setPaths] = useState([]);
+  const [isfocusto,setisfocusto]=useState(false);
+  const [isfocusfrom,setisfocusform]=useState(false);
 
   useEffect(() => {
     if (!isloading) return;
@@ -64,6 +68,7 @@ export default function Wpage(props) {
                   <span className="text-sm font-semibold text-slate-600">
                     Current location
                   </span>
+                  <div className="relative">
                   <input
                     id="fromInput"
                     name="from"
@@ -72,14 +77,21 @@ export default function Wpage(props) {
                     placeholder="e.g., Mumbai Central"
                     value={currlocation}
                     onChange={(e) => setcurrlocation(e.target.value)}
+                    onFocus={()=>setisfocusform(true)}
+                    onBlur={()=>setisfocusform(false)}
                     className="mt-2 w-full rounded-lg border border-slate-200 px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 transition-all duration-200"
                   />
+                  {
+                    isfocusfrom && <StationList setcurrlocation={setcurrlocation} currlocation={currlocation}/>
+                  }
+                  </div>
                 </label>
 
                 <label className="block">
                   <span className="text-sm font-semibold text-slate-600">
                     Destination
                   </span>
+                  <div className="relative">
                   <input
                     id="toInput"
                     name="to"
@@ -88,8 +100,14 @@ export default function Wpage(props) {
                     placeholder="e.g., Goa (Madgaon)"
                     value={destilocation}
                     onChange={(e) => setdestilocation(e.target.value)}
+                    onFocus={()=>setisfocusto(true)}
+                    onBlur={()=>setisfocusto(false)}
                     className="mt-2 w-full rounded-lg border border-slate-200 px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 transition-all duration-200"
                   />
+                  {
+                    isfocusto && <StationListto setdestilocation={setdestilocation} destilocation={destilocation}/>
+                  }
+                  </div>
                 </label>
               </div>
 
@@ -99,9 +117,12 @@ export default function Wpage(props) {
                   type="submit"
                   onClick={(e) => {
                     e.preventDefault();
-                    setfinalcurr(currlocation);
+                    // Better way to set final values
+                    const sourceStation = railwayStationsData.find(s => s.Station === currlocation);
+                    setfinalcurr(sourceStation ? sourceStation.Code : "");
                     setcurrlocation("");
-                    setfinaldest(destilocation);
+                    const destinationStation = railwayStationsData.find(s => s.Station === destilocation);
+                    setfinaldest(destinationStation ? destinationStation.Code : "");
                     setdestilocation("");
                     setisloading(true);
                   }}

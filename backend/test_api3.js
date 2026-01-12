@@ -93,9 +93,41 @@ function heuristic(currentStation, destinationStation, speedKmh = 50) {
 
 // Main A* Algorithm - Fixed version
 async function astar(source_code, destination_code) {
-  const now = DateTime.now().setZone("Asia/Kolkata");
-  const startTimeMinutes =now.hour * 60 + now.minute;
-  const startDay = now.weekday; // 1 = Monday
+  const now = new Date();
+
+  // Force IST using Intl
+  const formatter = new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "2-digit",
+    minute: "2-digit",
+    weekday: "short",
+    hour12: false
+  });
+
+  const parts = formatter.formatToParts(now);
+
+// Extract IST hour & minute
+  const hour = Number(parts.find(p => p.type === "hour").value);
+  const minute = Number(parts.find(p => p.type === "minute").value);
+
+// Keep variable name: startTimeMinutes
+  const startTimeMinutes = hour * 60 + minute;
+
+// Convert weekday string → number (0 = Sunday, 6 = Saturday)
+  const weekdayMap = {
+  Sun: 0,
+  Mon: 1,
+  Tue: 2,
+  Wed: 3,
+  Thu: 4,
+  Fri: 5,
+  Sat: 6
+  };
+
+// Keep variable name: startDay
+  const startDay = weekdayMap[
+    parts.find(p => p.type === "weekday").value
+  ];
   const openSet = new Set([source_code]);
   const cameFrom = new Map();
   const trainUsed = new Map();

@@ -101,12 +101,12 @@ async function astar(source_code, destination_code) {
   let startDay = now.getDay(); // 0 = Sunday
 
 // add 5 hours 30 minutes
-  startTimeMinutes += 5 * 60 + 30; // 5h30m = 330 minutes
+  startTimeMinutes -= 5 * 60 + 30; // 5h30m = 330 minutes
 
 // handle day rollover
-  if (startTimeMinutes >= 24 * 60) { // if >= 1440 minutes
-    startTimeMinutes -= 24 * 60; // subtract one day
-    startDay = (startDay + 1) % 7; // move to next day, wrap around 0-6
+  if (startTimeMinutes <= 0) { // if >= 1440 minutes
+    startTimeMinutes += 24 * 60; // subtract one day
+    startDay = (startDay - 1) % 7; // move to next day, wrap around 0-6
   }
   const openSet = new Set([source_code]);
   const cameFrom = new Map();

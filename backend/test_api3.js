@@ -95,7 +95,7 @@ async function astar(source_code, destination_code) {
   const now = new Date();
 
   // add 5 hours 30 minutes
-  const adjusted = new Date(now.getTime() + (5 * 60 + 30) * 60 * 1000);
+  const adjusted = new Date(now.getTime() - (5 * 60 + 30) * 60 * 1000);
 
  // keep variable names
   const startTimeMinutes = adjusted.getHours() * 60 + adjusted.getMinutes();

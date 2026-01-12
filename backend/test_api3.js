@@ -94,7 +94,7 @@ function heuristic(currentStation, destinationStation, speedKmh = 50) {
 // Main A* Algorithm - Fixed version
 async function astar(source_code, destination_code) {
   const now = new Date();
-
+  console.log(now);
   // Force IST using Intl
   const formatter = new Intl.DateTimeFormat("en-IN", {
     timeZone: "Asia/Kolkata",

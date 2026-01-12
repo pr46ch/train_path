@@ -1,6 +1,7 @@
 import { searchTrainBetweenStations } from 'irctc-connect';
 import { railwayStationsData } from './stations.js';
 import { calculateDistance } from './stations.js';
+import { DateTime } from "luxon";
 
 // Helper function to convert time to minutes
 function toMinutes(timeStr) {
@@ -92,10 +93,9 @@ function heuristic(currentStation, destinationStation, speedKmh = 50) {
 
 // Main A* Algorithm - Fixed version
 async function astar(source_code, destination_code) {
-  const now = new Date();
-  const startTimeMinutes = now.getHours() * 60 + now.getMinutes();
-  const startDay = now.getDay();
-
+  const now = DateTime.now().setZone("Asia/Kolkata");
+  const startTimeMinutes =now.hour * 60 + now.minute;
+  const startDay = now.weekday; // 1 = Monday
   const openSet = new Set([source_code]);
   const cameFrom = new Map();
   const trainUsed = new Map();

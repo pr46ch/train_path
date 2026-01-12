@@ -92,21 +92,22 @@ function heuristic(currentStation, destinationStation, speedKmh = 50) {
 
 // Main A* Algorithm - Fixed version
 async function astar(source_code, destination_code) {
-const now = new Date(
-  new Intl.DateTimeFormat("en-US", {
-    timeZone: "Asia/Kolkata",
-    hour12: false,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(new Date())
-);
+  const now = new Date();
 
-const startTimeMinutes = now.getHours() * 60 + now.getMinutes();
-const startDay = now.getDay();
+  // add 5 hours 30 minutes
+
+// keep variable names
+  let startTimeMinutes = now.getHours() * 60 + now.getMinutes();
+  let startDay = now.getDay(); // 0 = Sunday
+
+// add 5 hours 30 minutes
+  startTimeMinutes += 5 * 60 + 30; // 5h30m = 330 minutes
+
+// handle day rollover
+  if (startTimeMinutes >= 24 * 60) { // if >= 1440 minutes
+    startTimeMinutes -= 24 * 60; // subtract one day
+    startDay = (startDay + 1) % 7; // move to next day, wrap around 0-6
+  }
   const openSet = new Set([source_code]);
   const cameFrom = new Map();
   const trainUsed = new Map();

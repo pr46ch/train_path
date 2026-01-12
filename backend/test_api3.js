@@ -107,6 +107,7 @@ const now = new Date(
 
 const startTimeMinutes = now.getHours() * 60 + now.getMinutes();
 const startDay = now.getDay();
+  console.log(now);
   const openSet = new Set([source_code]);
   const cameFrom = new Map();
   const trainUsed = new Map();
